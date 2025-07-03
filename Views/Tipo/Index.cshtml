@@ -1,0 +1,62 @@
+@model IEnumerable<Tipo>
+
+@{
+    ViewData["Title"] = "Tipos de Inmueble";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show mt-3" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="@Url.Content("~/css/styleForm.css")" />
+
+<div class="card-container">
+
+    <h1>@ViewData["Title"]</h1>
+
+    <a asp-controller="Tipo" asp-action="Insertar" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Agregar Tipo de inmueble
+    </a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tipo de inmueble</th>
+                <th style="width: 130px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tipo in Model)
+            {
+                <tr>
+                    <td>@tipo.TipoInmueble</td>
+                    <td>
+                        <div class="table-actions">
+                            <a asp-controller="Tipo" asp-action="Actualizar" asp-route-id="@tipo.Id"
+                                class="btn btn-primary btn-sm" title="Modificar">
+                                <i class="bi bi-pencil-square"></i> Modificar
+                            </a>
+
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a asp-controller="Tipo" asp-action="Eliminar" asp-route-id="@tipo.Id"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de inmueble?')"
+                                    title="Eliminar">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

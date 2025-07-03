@@ -1,0 +1,526 @@
+@model IEnumerable<Contrato>
+
+@{
+    ViewData["Title"] = "Contrato";
+    var auditoriasPorContrato = ViewBag.AuditoriasPorContrato as Dictionary<int, IList<Auditoria>>;
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-form {
+        /* Estilo general para las tarjetas de formulario, similar al de la primera vista */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card h5,
+    .card-title {
+        /* Para los títulos dentro de las tarjetas de búsqueda/filtro */
+        color: #004080;
+        font-weight: 700;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control,
+    .form-select {
+        /* Aplica el mismo estilo de input y select */
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #004080;
+        box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+        outline: none;
+    }
+
+    /* Estilos para los botones principales (buscar, filtrar, agregar inmueble) */
+    .btn-primary-custom,
+    .btn-success-custom {
+        background-color: #004080;
+        border-color: #004080;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+        /* Asegura el color del texto */
+    }
+
+    .btn-primary-custom:hover,
+    .btn-success-custom:hover {
+        background-color: #003060;
+        border-color: #003060;
+        color: white;
+        /* Mantener el texto blanco en hover */
+    }
+
+    /* Estilo para el botón "Ver Disponibles" */
+    .btn-warning-custom {
+        background-color: #d4af37;
+        border-color: #d4af37;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+        /* Asegura el color del texto */
+    }
+
+    .btn-warning-custom:hover {
+        background-color: #b8912b;
+        /* Un tono un poco más oscuro para el hover */
+        border-color: #b8912b;
+        color: white;
+        /* Mantener el texto blanco en hover */
+    }
+
+    .btn-success-table {
+        background-color: #28a745;
+        /* Success de Bootstrap */
+        border-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        /* Un padding que funciona bien para ícono + texto */
+        display: inline-flex;
+        /* Permite alinear el ícono y el texto */
+        align-items: center;
+        /* Centra verticalmente ícono y texto */
+        gap: 5px;
+        /* Espacio entre el ícono y el texto */
+    }
+
+    .btn-success-table:hover {
+        background-color: #218838;
+        border-color: #218838;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #004080;
+        color: white;
+    }
+
+    .container.main-content {
+        /* Contenedor principal con sombra y borde */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        margin-top: 50px;
+        border-top: none;
+    }
+
+    .card-shadow-custom {
+        /* Para las tarjetas de "Buscar por Fechas" y "Filtrar por Propietario" */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        border: none;
+    }
+
+    /* --- Estilos para la Modal --- */
+    .modal-header-custom {
+        background-color: #004080;
+        /* Azul oscuro */
+        color: white;
+        border-bottom: 1px solid #dee2e6;
+        /* Separador sutil */
+        border-top-left-radius: calc(0.5rem - 1px);
+        /* Mantener el radio del borde */
+        border-top-right-radius: calc(0.5rem - 1px);
+    }
+
+    .modal-body-custom {
+        background-color: #ffffff;
+        /* Fondo blanco */
+        color: #333;
+    }
+
+    .modal-footer-custom {
+        background-color: #f8f9fa;
+        /* Gris claro */
+        border-top: 1px solid #dee2e6;
+        /* Separador sutil */
+        border-bottom-left-radius: calc(0.5rem - 1px);
+        border-bottom-right-radius: calc(0.5rem - 1px);
+    }
+
+    .list-group-item strong {
+        color: #004080;
+        /* Destacar las etiquetas en azul oscuro */
+    }
+
+    /* Estilos para los botones de acción dentro de la tabla (detalles, editar, eliminar) */
+    .btn-info-table {
+        background-color: #17a2b8;
+        /* Info de Bootstrap */
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-info-table:hover {
+        background-color: #138496;
+        border-color: #138496;
+        color: white;
+    }
+
+    .btn-primary-table {
+        background-color: #007bff;
+        /* Primary de Bootstrap */
+        border-color: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-primary-table:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .btn-danger-table {
+        background-color: #dc3545;
+        /* Danger de Bootstrap */
+        border-color: #dc3545;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-danger-table:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: white;
+    }
+
+    .btn-secondary-custom {
+        background-color: #6c757d;
+        /* Color gris de Bootstrap secondary */
+        border-color: #6c757d;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+    }
+
+    .btn-secondary-custom:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+</style>
+
+<div class="container main-content">
+    <h1 class="mb-4" style="color: #004080; font-weight: bold;">Gestión de Contratos</h1>
+
+    <div class="card card-shadow-custom mb-4">
+        <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Filtrar Contratos</h5>
+            <form method="get" asp-action="Index" class="row g-3">
+                <div class="col-md-3">
+                    <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="" />
+                </div>
+                <div class="col-md-3">
+                    <label for="fechaFin" class="form-label">Fecha Fin</label>
+                    <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="" />
+                </div>
+                <div class="col-md-3">
+                    <label for="idInmueble" class="form-label">Inmueble</label>
+                    <select class="form-select" id="idInmueble" name="idInmueble">
+                        <option value="">-- Todos los inmuebles --</option>
+                        @foreach (var inmueble in ViewBag.Inmuebles)
+                        {
+                            <option value="@inmueble.Id">@inmueble.Direccion</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="bi bi-search me-1"></i> Buscar Contratos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-start align-items-center mb-3">
+        <a asp-controller="Contrato" asp-action="Insertar" class="btn btn-primary-custom me-2">
+            <i class="bi bi-plus-circle me-1"></i> Agregar Contrato
+        </a>
+        <button id="btnContratosVigentes" class="btn btn-warning-custom">
+            <i class="bi bi-calendar-check me-1"></i> Ver Vigentes
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table id="miTabla" class="table table-hover align-middle border rounded overflow-hidden">
+            <thead style="background-color: #004080; color: white;">
+                <tr>
+                    <th style="display: none;">Id</th>
+                    <th>Inquilino</th>
+                    <th>Propietario</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Monto Mensual</th>
+                    <th>Vigente</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contrato in Model)
+                {
+                    <tr data-id="@contrato.Id" data-vigente="@contrato.Vigente.ToString().ToLower()">
+                        <td style="display: none;">@contrato.Id</td>
+                        <td>@contrato.Inquilino.ToString()</td>
+                        <td>@contrato.Propietario.ToString()</td>
+                        <td>@contrato.FechaInicio.ToShortDateString()</td>
+                        <td>@contrato.FechaFin.ToShortDateString()</td>
+                        <td>@contrato.MontoMensual</td>
+                        <td>@(contrato.Vigente ? "Sí" : "No")</td>
+                        <td class="text-center">
+                            <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                                <button class="btn btn-info-table btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#modalDetalles_@(contrato.Id)">
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
+                                <a asp-controller="Contrato" asp-action="Actualizar" asp-route-id="@contrato.Id"
+                                    class="btn btn-primary-table btn-sm">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                @if (User.IsInRole("Administrador"))
+                                {
+                                    <a asp-controller="Contrato" asp-action="Eliminar" asp-route-id="@contrato.Id"
+                                        class="btn btn-danger-table btn-sm"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este contrato?')">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                }
+                                <button class="btn btn-warning-custom btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#modalTerminar_@(contrato.Id)">
+                                    <i class="bi bi-x-circle"></i> Terminar
+                                </button>
+                                <a asp-controller="Contrato" asp-action="Renovar" asp-route-id="@contrato.Id"
+                                    class="btn btn-success-table btn-sm">
+                                    <i class="bi bi-arrow-clockwise"></i> Renovar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <div class="modal fade" id="modalDetalles_@(contrato.Id)" tabindex="-1"
+                        aria-labelledby="modalDetallesLabel_@(contrato.Id)" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header modal-header-custom">
+                                    <h5 class="modal-title" id="modalDetallesLabel_@contrato.Id">Detalles del Contrato</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body modal-body-custom">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Id:</strong> @contrato.Id</li>
+                                        <li class="list-group-item"><strong>Propietario:</strong>
+                                            @contrato.Propietario.ToString()</li>
+                                        <li class="list-group-item"><strong>Inquilino:</strong>
+                                            @contrato.Inquilino.ToString()</li>
+                                        <li class="list-group-item"><strong>Datos del inmueble:</strong>
+                                            @contrato.Inmueble.ToString()</li>
+                                        <li class="list-group-item"><strong>Fecha de inicio:</strong>
+                                            @contrato.FechaInicio.ToShortDateString()</li>
+                                        <li class="list-group-item"><strong>Fecha de fin:</strong>
+                                            @contrato.FechaFin.ToShortDateString()</li>
+                                        <li class="list-group-item"><strong>Vigente:</strong> @(contrato.Vigente ? "Sí" :
+                                                                                    "No")</li>
+                                        <li class="list-group-item"><strong>Monto mensual:</strong> @contrato.MontoMensual
+                                        </li>
+                                    </ul>
+
+                                    @if (User.IsInRole("Administrador"))
+                                    {
+                                        <div id="auditorias_@(contrato.Id)" class="card-footer mt-4 p-3 bg-light rounded"
+                                            style="border: 1px solid #dee2e6;">
+                                            <h5 class="text-muted mb-3" style="color: #004080 !important;"><strong>Información
+                                                    de auditoría</strong></h5>
+                                            <ul class="list-group list-group-flush">
+                                                @if (auditoriasPorContrato.ContainsKey(contrato.Id))
+                                                {
+                                                    var auditorias = auditoriasPorContrato[contrato.Id];
+                                                    if (auditorias.Any())
+                                                    {
+                                                        foreach (var auditoria in auditorias)
+                                                        {
+                                                            <li class="list-group-item border-bottom pb-2 mb-2">
+                                                                <small class="text-muted d-block"><strong>Fecha:</strong>
+                                                                    @auditoria.FechaAccion.ToShortDateString()</small>
+                                                                <small class="text-muted d-block"><strong>Acción:</strong>
+                                                                    @(auditoria.Accion ? "Alta" : "Baja")</small>
+                                                                <small class="text-muted d-block"><strong>Descripción:</strong>
+                                                                    @auditoria.Descripcion</small>
+                                                                <small class="text-muted d-block"><strong>Realizado por:</strong>
+                                                                    @auditoria.Usuario.Nombre @auditoria.Usuario.Apellido</small>
+                                                            </li>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="list-group-item">No hay auditorías para este contrato.</li>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <li class="list-group-item">No hay auditorías para este contrato.</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="modal-footer modal-footer-custom">
+                                    <button type="button" class="btn btn-secondary-custom"
+                                        data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modalTerminar_@(contrato.Id)" tabindex="-1"
+                        aria-labelledby="modalTerminarLabel_@(contrato.Id)" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header modal-header-custom" style="background-color: #d4af37 !important;">
+                                    <h5 class="modal-title" id="modalTerminarLabel_@(contrato.Id)">Terminar Contrato</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body modal-body-custom">
+                                    <form id="formTerminar_@(contrato.Id)" asp-controller="Contrato" asp-action="Terminar"
+                                        method="post">
+                                        <input type="hidden" name="id" value="@contrato.Id" />
+                                        <div class="mb-3">
+                                            <label for="fechaTerminacion_@(contrato.Id)" class="form-label">Fecha de
+                                                Terminación</label>
+                                            <input type="date" class="form-control" id="fechaTerminacion_@(contrato.Id)"
+                                                name="fechaTerminacion" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-info-table"
+                                                onclick="calcularMulta(@contrato.Id)">
+                                                <i class="bi bi-calculator me-1"></i> Calcular Multa
+                                            </button>
+                                            <div id="multaCalculada_@(contrato.Id)" class="mt-3"></div>
+                                        </div>
+                                        <button type="submit" class="btn btn-danger-table w-100">
+                                            <i class="bi bi-currency-dollar me-1"></i> Abonar y Finalizar
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer modal-footer-custom">
+                                    <button type="button" class="btn btn-secondary-custom"
+                                        data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Inicialización de DataTable si la estás usando
+            // $('#miTabla').DataTable(); 
+            // Ten en cuenta que si la tabla se actualiza por AJAX, DataTable debe reinicializarse.
+
+            $('#btnContratosVigentes').click(function () {
+                $('#miTabla tbody tr').each(function () {
+                    if ($(this).data('vigente') === true) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+
+        // Calcular multa
+        function calcularMulta(contratoId) {
+            var fechaTerminacion = $('#fechaTerminacion_' + contratoId).val();
+            if (!fechaTerminacion) {
+                alert("Por favor, selecciona una fecha de terminación.");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("CalcularMulta", "Contrato")',
+                type: 'POST',
+                data: {
+                    id: contratoId,
+                    fechaTerminacion: fechaTerminacion
+                },
+                success: function (response) {
+                    $('#multaCalculada_' + contratoId).html(
+                        '<div class="alert alert-info">Para finalizar debe abonar una multa total de $: <strong>' + response.multa + '</strong></div>'
+                    );
+                },
+                error: function () {
+                    alert("Ocurrió un error al calcular la multa. Inténtalo nuevamente.");
+                }
+            });
+        }
+    </script>
+}

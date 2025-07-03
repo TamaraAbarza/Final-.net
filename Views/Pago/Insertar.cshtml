@@ -1,0 +1,111 @@
+@using System.Globalization
+@model Pago
+
+@{
+    ViewData["Title"] = "Agregar nuevo pago";
+    var contratos = (IList<Contrato>)ViewBag.Contratos;
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="@Url.Content("~/css/stylePago.css")" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-cash-stack"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Pago" asp-action="Insertar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="Detalle">Mes</label>
+                        <select class="form-control" id="Detalle" name="Detalle" required>
+                            <option value="" disabled selected>Seleccione un mes</option>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@DateTimeFormatInfo.CurrentInfo.GetMonthName(i)">
+                                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(i)
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="Detalle" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="Fecha">Fecha</label>
+                        <input asp-for="Fecha" class="form-control" type="date" id="Fecha" name="Fecha"
+                            value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        <span asp-validation-for="Fecha" class="text-danger"></span>
+                    </div>
+
+                    @if (@Model.Contrato == null)
+                    {
+                        <div class="mb-4">
+                            <label class="form-label" for="IdContrato">Contrato</label>
+                            <select class="form-control" id="IdContrato" name="IdContrato" required>
+                                <option value="" disabled selected>Seleccione un contrato</option>
+                                @foreach (var item in contratos)
+                                {
+                                    <option value="@item.Id">
+                                        @(item.Id) - @item.Propietario.Apellido - @item.Inquilino.Apellido
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="IdContrato" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Importe" class="form-label">Importe</label>
+                            <input asp-for="Importe" class="form-control" type="number" step="any" min="0.01" required />
+                            <span asp-validation-for="Importe" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-4">
+                            <label asp-for="Importe" class="form-label">Importe desde contrato</label>
+                            <input asp-for="Importe" class="form-control" type="text" value="@Model.Contrato.MontoMensual"
+                                readonly />
+                            <span asp-validation-for="Importe" class="text-danger"></span>
+                        </div>
+
+                        <input type="hidden" asp-for="IdContrato" />
+                    }
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var importeInput = document.getElementById("Importe");
+
+        if (importeInput) {
+            importeInput.addEventListener("input", function () {
+                var importeValue = parseFloat(importeInput.value);
+
+                if (importeValue <= 0 || isNaN(importeValue)) {
+                    importeInput.setCustomValidity("El importe debe ser un número válido y mayor que cero.");
+                } else {
+                    importeInput.setCustomValidity("");
+                }
+            });
+        }
+    });
+</script>

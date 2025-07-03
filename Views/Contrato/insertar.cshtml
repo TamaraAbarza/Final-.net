@@ -1,0 +1,153 @@
+@model Contrato
+@using ABM_inmobiliaria.Models
+@{
+    ViewData["Title"] = "Agregar Contrato";
+    var inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
+    var inquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="@Url.Content("~/css/styleContrato.css")" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-file-earmark-text-fill"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Contrato" asp-action="Insertar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="IdInmueble">Inmueble</label>
+                        <select class="form-control" id="IdInmueble" name="IdInmueble" required>
+                            <option value="" disabled selected>Seleccione un inmueble</option>
+                            @foreach (var item in inmuebles)
+                            {
+                                if (item.Disponible)
+                                {
+                                    <option value="@item.Id" data-precio="@item.Precio">@(item.ToString())</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="IdInmueble" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="IdInquilino">Inquilino</label>
+                        <div class="d-flex gap-3">
+                            <select class="form-control" id="IdInquilino" name="IdInquilino" required>
+                                <option value="" disabled selected>Seleccione un inquilino</option>
+                                @foreach (var item in inquilinos)
+                                {
+                                    <option value="@item.Id">@(item.ToString())</option>
+                                }
+                            </select>
+                            <button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
+                                data-bs-target="#nuevoInquilinoModal">
+                                <i class="bi bi-plus-circle"></i> Nuevo
+                            </button>
+                        </div>
+                        <span asp-validation-for="IdInquilino" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="FechaInicio">Fecha de inicio</label>
+                        <input asp-for="FechaInicio" class="form-control" type="date" id="FechaInicio"
+                            name="FechaInicio" required />
+                        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="FechaFin">Fecha de finalización</label>
+                        <input asp-for="FechaFin" class="form-control" type="date" id="FechaFin" name="FechaFin"
+                            required />
+                        <span asp-validation-for="FechaFin" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="MontoMensual" class="form-label">Monto mensual</label>
+                        <input asp-for="MontoMensual" class="form-control" type="number" min="1" step="any" id="MontoMensual" />
+                        <span asp-validation-for="MontoMensual" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <a asp-controller="Contrato" asp-action="Index" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nuevo Inquilino -->
+<div class="modal fade" id="nuevoInquilinoModal" tabindex="-1" aria-labelledby="nuevoInquilinoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="nuevoInquilinoModalLabel">Nuevo Inquilino</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Inquilino" asp-action="Insertar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Inquilino.Nombre" class="form-label">Nombre</label>
+                        <input asp-for="Inquilino.Nombre" class="form-control" />
+                        <span asp-validation-for="Inquilino.Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Inquilino.Apellido" class="form-label">Apellido</label>
+                        <input asp-for="Inquilino.Apellido" class="form-control" />
+                        <span asp-validation-for="Inquilino.Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Inquilino.Dni" class="form-label">DNI</label>
+                        <input asp-for="Inquilino.Dni" class="form-control" type="text" />
+                        <span asp-validation-for="Inquilino.Dni" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inmuebleSelect = document.getElementById("IdInmueble");
+        const montoInput = document.getElementById("MontoMensual");
+
+        inmuebleSelect.addEventListener("change", function () {
+            const selectedOption = inmuebleSelect.options[inmuebleSelect.selectedIndex];
+            const precio = selectedOption.getAttribute("data-precio");
+
+            if (precio) {
+                montoInput.value = precio;
+            }
+        });
+    });
+</script>
+}

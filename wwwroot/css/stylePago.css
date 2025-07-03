@@ -1,0 +1,266 @@
+/* Estilos Generales */
+body {
+    background-color: #f4f6f9; /* Color de fondo general para las vistas */
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Estilos para Tarjetas de Formulario */
+.card-form {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 50px;
+}
+
+.card-form h3 {
+    color: #004080;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Estilos para títulos dentro de las tarjetas de búsqueda/filtro */
+.card h5, .card-title {
+    color: #004080;
+    font-weight: 700;
+}
+
+/* Estilos para Etiquetas de Formulario */
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Estilos para Controles de Formulario e Inputs/Selects */
+.form-control, select, .form-select {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus, select:focus, .form-select:focus {
+    border-color: #004080;
+    box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+    outline: none;
+}
+
+/* Estilos para Botones Principales (aplicables a formularios y acciones grandes) */
+/* Todas estas clases compartirán el mismo tamaño, padding, alineación y color de texto (blanco) */
+.btn-primary,
+.btn-success,          /* Incluido aquí para asegurar tamaño y texto blanco */
+.btn-danger,
+.btn-primary-custom,
+.btn-success-custom,   /* Incluido aquí para asegurar tamaño y texto blanco */
+.btn-danger-custom,
+.btn-warning-custom,
+.btn-secondary-custom
+{
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-flex; /* Permite que los botones se alineen horizontalmente en un contenedor flex */
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    color: white; /* Color de texto blanco para todos estos botones */
+}
+
+/* Estilos de hover generales para los botones principales y custom */
+.btn-primary:hover, .btn-success:hover, .btn-danger:hover,
+.btn-primary-custom:hover, .btn-success-custom:hover, .btn-danger-custom:hover,
+.btn-warning-custom:hover, .btn-secondary-custom:hover
+{
+    color: white; /* Mantiene el texto blanco en hover */
+}
+
+/* Colores de fondo y borde para los botones principales (AZULES) */
+/* Estos selectores son más específicos y se aplican después de las propiedades generales,
+   asegurando que sobrescriben los colores predeterminados de Bootstrap si es necesario. */
+.btn-primary,
+.btn-primary-custom,
+.btn-success,          /* ¡Asegura que btn-success sea azul! */
+.btn-success-custom    /* ¡Asegura que btn-success-custom sea azul! */
+{
+    background-color: #004080; /* Azul oscuro principal */
+    border-color: #004080;
+}
+.btn-primary:hover,
+.btn-primary-custom:hover,
+.btn-success:hover,    /* Hover azul para btn-success */
+.btn-success-custom:hover /* Hover azul para btn-success-custom */
+{
+    background-color: #003060; /* Azul oscuro más fuerte al pasar el ratón */
+    border-color: #003060;
+}
+
+
+/* Colores de fondo y borde para otros tipos de botones */
+.btn-danger, .btn-danger-custom {
+    background-color: #dc3545; /* Rojo de Bootstrap Danger */
+    border-color: #dc3545;
+}
+.btn-danger:hover, .btn-danger-custom:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+.btn-warning-custom {
+    background-color: #d4af37; /* Amarillo personalizado */
+    border-color: #d4af37;
+}
+.btn-warning-custom:hover {
+    background-color: #b8912b;
+    border-color: #b8912b;
+}
+
+.btn-secondary-custom {
+    background-color: #6c757d; /* Gris de Bootstrap Secondary */
+    border-color: #6c757d;
+}
+.btn-secondary-custom:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Estilos para los botones de acción dentro de la tabla (más pequeños) */
+.btn-success-table {
+    background-color: #28a745; /* Success de Bootstrap */
+    border-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-success-table:hover {
+    background-color: #218838;
+    border-color: #218838;
+    color: white;
+}
+
+.btn-info-table {
+    background-color: #17a2b8; /* Info de Bootstrap */
+    border-color: #17a2b8;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-info-table:hover {
+    background-color: #138496;
+    border-color: #138496;
+    color: white;
+}
+
+.btn-primary-table {
+    background-color: #007bff; /* Primary de Bootstrap */
+    border-color: #007bff;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-primary-table:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: white;
+}
+
+.btn-danger-table {
+    background-color: #dc3545; /* Danger de Bootstrap */
+    border-color: #dc3545;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-danger-table:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+    color: white;
+}
+
+/* Estilos para la tabla */
+.table thead {
+    background-color: #004080;
+    color: white;
+}
+
+/* Contenedor principal de contenido con sombra y borde */
+.container.main-content {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 50px;
+    border-top: none;
+}
+
+/* Para las tarjetas de búsqueda y filtro con sombra */
+.card-shadow-custom {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    border: none;
+}
+
+/* Estilos para la Modal (ventanas emergentes) */
+.modal-header-custom {
+    background-color: #004080; /* Azul oscuro */
+    color: white;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.5rem - 1px);
+    border-top-right-radius: calc(0.5rem - 1px);
+}
+
+.modal-body-custom {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #333;
+}
+
+.modal-footer-custom {
+    background-color: #f8f9fa; /* Gris claro */
+    border-top: 1px solid #dee2e6;
+    border-bottom-left-radius: calc(0.5rem - 1px);
+    border-bottom-right-radius: calc(0.5rem - 1px);
+}
+
+.list-group-item strong {
+    color: #004080; /* Destaca las etiquetas en azul oscuro */
+}
+
+/* Estilos específicos para el fieldset y legend en formularios */
+.card-form fieldset.border {
+    border: 1px solid #dee2e6 !important;
+    padding: 1.5rem !important;
+    border-radius: 8px;
+}
+
+.card-form fieldset legend {
+    font-size: 1.25rem;
+    font-weight: 600;
+    width: auto;
+    padding: 0 0.5rem;
+    margin-left: 1rem;
+    color: #004080;
+    background-color: transparent;
+    border: none;
+}
+
+/* Contenedor Flexbox para alinear elementos (como botones) horizontalmente con espacio */
+.d-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px; /* Agrega un margen superior para separar de elementos anteriores */
+}

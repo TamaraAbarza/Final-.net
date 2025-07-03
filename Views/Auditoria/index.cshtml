@@ -1,0 +1,256 @@
+@model IEnumerable<Auditoria>
+
+@{
+    ViewData["Title"] = "Auditoria";
+}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-form { /* Estilo general para las tarjetas de formulario, similar al de la primera vista */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card h5, .card-title { /* Para los títulos dentro de las tarjetas de búsqueda/filtro */
+        color: #004080;
+        font-weight: 700;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control, .form-select { /* Aplica el mismo estilo de input y select */
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #004080;
+        box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+        outline: none;
+    }
+
+    /* Estilos para los botones principales (buscar, filtrar, agregar inmueble) */
+    .btn-primary-custom, .btn-success-custom, .btn-danger-custom {
+        background-color: #004080;
+        border-color: #004080;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white; /* Asegura el color del texto */
+    }
+
+    .btn-primary-custom:hover, .btn-success-custom:hover, .btn-danger-custom:hover {
+        background-color: #003060;
+        border-color: #003060;
+        color: white; /* Mantener el texto blanco en hover */
+    }
+
+    /* Estilo específico para el botón "Pagos Anulados" que ahora será rojo grande */
+    .btn-danger-custom {
+        background-color: #dc3545; /* Bootstrap danger color */
+        border-color: #dc3545;
+    }
+    .btn-danger-custom:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+    }
+
+
+    /* Estilo para el botón "Listar Pagos" (ahora amarillo) */
+    .btn-warning-custom {
+        background-color: #d4af37;
+        border-color: #d4af37;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white; /* Asegura el color del texto */
+    }
+
+    .btn-warning-custom:hover {
+        background-color: #b8912b; /* Un tono un poco más oscuro para el hover */
+        border-color: #b8912b;
+        color: white; /* Mantener el texto blanco en hover */
+    }
+
+    .btn-success-table {
+        background-color: #28a745; /* Success de Bootstrap */
+        border-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px; /* Un padding que funciona bien para ícono + texto */
+        display: inline-flex; /* Permite alinear el ícono y el texto */
+        align-items: center; /* Centra verticalmente ícono y texto */
+        gap: 5px; /* Espacio entre el ícono y el texto */
+    }
+    .btn-success-table:hover {
+        background-color: #218838;
+        border-color: #218838;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #004080; /* Color de cabecera de tabla de la vista de pagos */
+        color: white;
+    }
+
+    .container.main-content { /* Contenedor principal con sombra y borde */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        margin-top: 50px;
+        border-top: none;
+    }
+
+    .card-shadow-custom { /* Para las tarjetas de "Buscar por Fechas" y "Filtrar por Propietario" */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        border: none;
+    }
+
+    /* --- Estilos para la Modal (aunque no hay modal en esta vista, se incluyen por coherencia) --- */
+    .modal-header-custom {
+        background-color: #004080; /* Azul oscuro */
+        color: white;
+        border-bottom: 1px solid #dee2e6; /* Separador sutil */
+        border-top-left-radius: calc(0.5rem - 1px); /* Mantener el radio del borde */
+        border-top-right-radius: calc(0.5rem - 1px);
+    }
+
+    .modal-body-custom {
+        background-color: #ffffff; /* Fondo blanco */
+        color: #333;
+    }
+
+    .modal-footer-custom {
+        background-color: #f8f9fa; /* Gris claro */
+        border-top: 1px solid #dee2e6; /* Separador sutil */
+        border-bottom-left-radius: calc(0.5rem - 1px);
+        border-bottom-right-radius: calc(0.5rem - 1px);
+    }
+
+    .list-group-item strong {
+        color: #004080; /* Destacar las etiquetas en azul oscuro */
+    }
+
+    /* Estilos para los botones de acción dentro de la tabla (detalles, editar, eliminar) */
+    .btn-info-table {
+        background-color: #17a2b8; /* Info de Bootstrap */
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-info-table:hover {
+        background-color: #138496;
+        border-color: #138496;
+        color: white;
+    }
+
+    .btn-primary-table {
+        background-color: #007bff; /* Primary de Bootstrap */
+        border-color: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-primary-table:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .btn-danger-table {
+        background-color: #dc3545; /* Danger de Bootstrap */
+        border-color: #dc3545;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-danger-table:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: white;
+    }
+
+    .btn-secondary-custom {
+        background-color: #6c757d; /* Color gris de Bootstrap secondary */
+        border-color: #6c757d;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+    }
+
+    .btn-secondary-custom:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+
+</style>
+
+<div class="container main-content">
+    <h1 class="mb-4" style="color: #004080; font-weight: bold;">Auditoría</h1>
+    
+    <div class="table-responsive">
+        <table id="miTabla" class="table table-hover align-middle border rounded overflow-hidden">
+            <thead style="background-color: #004080; color: white;">
+                <tr>
+                    <th>Entidad</th>
+                    <th>Fecha</th>
+                    <th>Acción</th>
+                    <th>Descripción</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Auditoria in Model)
+                {
+                    <tr>
+                        <td>@Auditoria.Entidad</td>
+                        <td>@Auditoria.FechaAccion.ToShortDateString()</td>
+                        <td>@(Auditoria.Accion ? "Alta" : "Baja")</td>
+                        <td>@Auditoria.Descripcion</td>
+                        <td>@Auditoria.Usuario.Nombre @Auditoria.Usuario.Apellido</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

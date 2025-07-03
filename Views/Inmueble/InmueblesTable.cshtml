@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Inmueble>
+
+@foreach (var inmueble in Model)
+{
+
+    <tr>
+        <td>@inmueble.Propietario.ToString()</td>
+        <td>@inmueble.Direccion</td>
+        <td>@inmueble.Ambientes</td>
+        <td>@inmueble.Tipo.ToString()</td>
+        <td>@inmueble.Precio</td>
+        <td>@(inmueble.Disponible? "Sí" : "No") </td>
+        <td>
+            <a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@inmueble.Id"
+                class="btn btn-info-table btn-sm me-1" data-bs-toggle="modal" data-bs-target="#modalDetalles_@inmueble.Id">
+                <i class="bi bi-eye-fill"></i>
+            </a>
+            <a asp-controller="Inmueble" asp-action="Actualizar" asp-route-id="@inmueble.Id"
+                class="btn btn-primary-table btn-sm me-1">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+            @if (User.IsInRole("Administrador"))
+            {
+                <a asp-controller="Inmueble" asp-action="Eliminar" asp-route-id="@inmueble.Id"
+                    class="btn btn-danger-table btn-sm"
+                    onclick="return confirm('¿Estás seguro de que deseas eliminar este inmueble?')">
+                    <i class="bi bi-trash3"></i>
+                </a>
+            }
+             <form asp-controller="Contrato" asp-action="Insertar2" class="d-inline">
+                <input type="hidden" name="InmuebleId" value="@inmueble.Id" />
+                <input type="hidden" name="FechaInicio" value="@ViewBag.FechaInicio" />
+                <input type="hidden" name="FechaFin" value="@ViewBag.FechaFin" />
+                <button type="submit" class="btn btn-success-table btn-sm">
+                    <i class="bi bi-file-earmark-plus"></i> Crear Contrato @* ¡Aquí está la clave! Ícono Y Texto *@
+                </button>
+            </form>
+        </td>
+    </tr>
+}

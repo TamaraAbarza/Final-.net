@@ -1,0 +1,88 @@
+@model Contrato
+@{
+    ViewData["Title"] = "Actualizar Contrato";
+    var propietarios = (IList<Propietario>)ViewBag.Propietarios;
+    var inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
+    var inquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
+    //var usuarios = (IList<Usuario>)ViewBag.usuarios;
+}
+
+<link rel="stylesheet" href="@Url.Content("~/css/styleContrato.css")" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-file-earmark-text-fill"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Contrato" asp-action="Actualizar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    @*
+                    <div class="form-group">
+                        <label class="control-label">Propietarios</label>
+                        <select class="form-control" name="IdPropietario">
+                            @foreach (var item in propietarios)
+                            {
+                                @:<option @(item.Id == Model.IdPropietario ? "selected" : "") value="@item.Id">@(item.ToString())</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    *@
+
+                    <div class="mb-4">
+                        <label class="form-label">Inmuebles</label>
+                        <select class="form-control" name="IdInmueble">
+                            <option value="" disabled selected>Seleccione un inmueble</option>
+                            @foreach (var item in inmuebles)
+                            {
+                                if(item.Disponible){
+                                    @:<option @(item.Id == Model.IdInmueble ? "selected" : "") value="@item.Id">@(item.ToString())</option>
+                                }   
+                            }
+                        </select>
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Inquilinos</label>
+                        <select class="form-control" name="IdInquilino">
+                            <option value="" disabled selected>Seleccione un inquilino</option>
+                            @foreach (var item in inquilinos)
+                            {
+                                @:<option @(item.Id == Model.IdInquilino ? "selected" : "") value="@item.Id">@(item.ToString())</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="FechaInicio">Fecha inicio</label>
+                        <input type="date" class="form-control" id="datepicker" asp-for="FechaInicio" name="fechaInicio">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="FechaFin">Fecha Finalizacion</label>
+                        <input type="date" class="form-control" id="datepicker" asp-for="FechaFin" name="fechaFin">
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="MontoMensual" class="form-label">Monto mensual</label>
+                        <input asp-for="MontoMensual" class="form-control" type="number" />
+                        <span asp-validation-for="MontoMensual" class="text-danger"></span>
+                    </div> 
+
+                    <div class="d-flex-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar Cambios
+                        </button>
+                        <a asp-controller="Contrato" asp-action="Index" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

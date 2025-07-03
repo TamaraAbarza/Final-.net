@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Propietario>
+@{
+    ViewData["Title"] = "Propietario";
+}
+
+<!-- Enlace al archivo CSS personalizado -->
+<link rel="stylesheet" href="@Url.Content("~/css/style.css")" />
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="container main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Gestión de Propietarios</h1>
+        <a asp-controller="Propietario" asp-action="Insertar" class="btn btn-primary-custom">
+            <i class="bi bi-plus-circle me-1"></i> Agregar Propietario
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table id="miTabla" class="table table-hover align-middle border rounded overflow-hidden">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Propietario in Model)
+                {
+                    <tr>
+                        <td>@Propietario.Nombre</td>
+                        <td>@Propietario.Apellido</td>
+                        <td>@Propietario.Dni</td>
+                        <td>@Propietario.Telefono</td>
+                        <td>@Propietario.Email</td>
+                        <td class="text-center">
+                            <a asp-controller="Propietario" asp-action="Insertar" asp-route-id="@Propietario.Id"
+                               class="btn btn-primary-table me-2" style="min-width: 100px;">
+                                <i class="bi bi-pencil-square"></i> Modificar
+                            </a>
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a asp-controller="Propietario" asp-action="Eliminar" asp-route-id="@Propietario.Id"
+                                   class="btn btn-danger-table" style="min-width: 100px;"
+                                   onclick="return confirm('¿Estás seguro de que deseas eliminar esta persona?')">
+                                    <i class="bi bi-trash3"></i> Eliminar
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

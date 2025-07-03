@@ -1,0 +1,231 @@
+/* Estilos Generales */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Contenedor principal */
+.container.main-content {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 50px;
+    border-top: none;
+}
+
+/* Títulos */
+.card-title, h1 {
+    color: #004080;
+    font-weight: 700;
+}
+
+/* Formularios */
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #004080;
+    box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+    outline: none;
+}
+
+/* === BOTONES PERSONALIZADOS PRINCIPALES === */
+.btn-primary-custom,
+.btn-success-custom,
+.btn-danger-custom,
+.btn-warning-custom,
+.btn-secondary-custom {
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    color: white !important;
+    text-decoration: none;
+    width: auto;
+}
+
+/* Textos siempre blancos en hover */
+.btn-primary-custom:hover,
+.btn-success-custom:hover,
+.btn-danger-custom:hover,
+.btn-warning-custom:hover,
+.btn-secondary-custom:hover {
+    color: white !important;
+    text-decoration: none;
+}
+
+/* Colores por tipo */
+.btn-primary-custom {
+    background-color: #004080;
+    border-color: #004080;
+}
+.btn-primary-custom:hover {
+    background-color: #003060;
+    border-color: #003060;
+}
+
+.btn-success-custom {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-success-custom:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.btn-danger-custom {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger-custom:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+.btn-warning-custom {
+    background-color: #d4af37;
+    border-color: #d4af37;
+}
+.btn-warning-custom:hover {
+    background-color: #b8912b;
+    border-color: #b8912b;
+}
+
+.btn-secondary-custom {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+.btn-secondary-custom:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* === BOTONES DE TABLA === */
+.btn-primary-table,
+.btn-danger-table,
+.btn-success-table,
+.btn-info-table {
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.btn-primary-table:hover,
+.btn-danger-table:hover,
+.btn-success-table:hover,
+.btn-info-table:hover {
+    color: white !important;
+    text-decoration: none;
+}
+
+/* Colores botones tabla */
+.btn-primary-table {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary-table:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-danger-table {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger-table:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+.btn-success-table {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-success-table:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.btn-info-table {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-info-table:hover {
+    background-color: #138496;
+    border-color: #138496;
+}
+
+/* Tablas */
+.table thead {
+    background-color: #004080;
+    color: white;
+}
+
+/* Avatar */
+.avatar-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Alertas */
+.alert {
+    font-weight: 500;
+}
+
+/* Modal */
+.modal-header-custom {
+    background-color: #004080;
+    color: white;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.5rem - 1px);
+    border-top-right-radius: calc(0.5rem - 1px);
+}
+
+.modal-body-custom {
+    background-color: #ffffff;
+    color: #333;
+}
+
+.modal-footer-custom {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-bottom-left-radius: calc(0.5rem - 1px);
+    border-bottom-right-radius: calc(0.5rem - 1px);
+}
+
+/* === Correcciones para enlaces que actúan como botones === */
+a.btn-primary-custom:hover,
+a.btn-success-custom:hover,
+a.btn-danger-custom:hover,
+a.btn-warning-custom:hover,
+a.btn-secondary-custom:hover,
+a.btn-primary-table:hover,
+a.btn-danger-table:hover,
+a.btn-success-table:hover,
+a.btn-info-table:hover {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+

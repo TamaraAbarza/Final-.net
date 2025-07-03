@@ -1,0 +1,138 @@
+﻿@model Inquilino
+@{
+    ViewData["Title"] = Model.Id > 0 ? "Modificar inquilino" : "Agregar inquilino";
+    Layout = "_Layout";
+}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-form {
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        margin-top: 50px;
+    }
+
+    .card-form h3 {
+        color: #004080;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #004080;
+        box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+    }
+
+    .btn-primary {
+        background-color: #004080;
+        border-color: #004080;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+        background-color: #003060;
+        border-color: #003060;
+    }
+
+    .btn-danger {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 10px 20px;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+    }
+
+    .form-icon {
+        margin-right: 8px;
+        color: #004080;
+    }
+
+    .form-login, .label-avatar, legend, .align-right {
+
+    }
+</style>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-person-lines-fill form-icon"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Inquilino" asp-action="Insertar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    @if (Model.Id > 0)
+                    {
+                        <input type="hidden" asp-for="Id" />
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label">Nombre</label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Apellido" class="form-label">Apellido</label>
+                        <input asp-for="Apellido" class="form-control" />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Dni" class="form-label">DNI</label>
+                        <input asp-for="Dni" class="form-control" type="number" />
+                        <span asp-validation-for="Dni" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Telefono" class="form-label">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" type="number" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <a asp-controller="Inquilino" asp-action="Index" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

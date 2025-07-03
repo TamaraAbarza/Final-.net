@@ -1,0 +1,127 @@
+﻿@model Inmueble
+@{
+    ViewData["Title"] = "Agregar Inmueble";
+    var propietarios = (IList<Propietario>)ViewBag.Propietarios;
+    var tiposInmueble = (IList<Tipo>)ViewBag.TiposInmueble;
+}
+
+@{
+    Layout = "_Layout"; // o null si querés que sea independiente
+}
+
+<link rel="stylesheet" href="~/css/style2.css" asp-append-version="true" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-building"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Inmueble" asp-action="Insertar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    @if (Model != null && Model.Id > 0)
+                    {
+                        <input type="hidden" asp-for="Id" />
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Propietario</label>
+                        <select asp-for="IdPropietario" class="form-control">
+                            <option value="">-- Seleccione propietario --</option>
+                            @foreach (var item in propietarios)
+                            {
+                                var selected = (Model != null && Model.IdPropietario == item.Id) ? "selected" : "";
+                                <option value="@item.Id" selected="@selected">@item.ToString()</option>
+                            }
+                        </select>
+                        <span asp-validation-for="IdPropietario" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de inmueble</label>
+                        <select asp-for="IdTipo" class="form-control">
+                            <option value="">-- Seleccione tipo --</option>
+                            @foreach (var item in tiposInmueble)
+                            {
+                                var selected = (Model != null && Model.IdTipo == item.Id) ? "selected" : "";
+                                <option value="@item.Id" selected="@selected">@item.ToString()</option>
+                            }
+                        </select>
+                        <span asp-validation-for="IdTipo" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Direccion" class="form-label"></label>
+                        <input asp-for="Direccion" class="form-control" />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Ambientes" class="form-label"></label>
+                        <input asp-for="Ambientes" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="Ambientes" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Superficie" class="form-label">Superficie en m²</label>
+                        <input asp-for="Superficie" class="form-control" type="number" min="10" />
+                        <span asp-validation-for="Superficie" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Latitud" class="form-label"></label>
+                        <input asp-for="Latitud" class="form-control" type="number" step="any" />
+                        <span asp-validation-for="Latitud" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Longitud" class="form-label"></label>
+                        <input asp-for="Longitud" class="form-control" type="number" step="any" />
+                        <span asp-validation-for="Longitud" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Uso del inmueble</label>
+                        <select asp-for="Uso" class="form-control">
+                            <option value="Comercial">Comercial</option>
+                            <option value="Residencial">Residencial</option>
+                        </select>
+                        <span asp-validation-for="Uso" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Precio" class="form-label"></label>
+                        <input asp-for="Precio" class="form-control" type="number" step="any" min="10000" />
+                        <span asp-validation-for="Precio" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <a asp-controller="Inmueble" asp-action="Index" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var precioInput = document.querySelector("[asp-for='Precio']");
+        if (!precioInput) return;
+
+        precioInput.addEventListener("input", function () {
+            var precioValue = parseFloat(precioInput.value);
+            if (isNaN(precioValue) || precioValue <= 0) {
+                precioInput.setCustomValidity("El precio debe ser un número válido y mayor que cero.");
+            } else {
+                precioInput.setCustomValidity("");
+            }
+        });
+    });
+</script>

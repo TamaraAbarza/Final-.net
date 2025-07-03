@@ -1,0 +1,54 @@
+@model Contrato
+
+@{
+    ViewData["Title"] = "Renovar Contrato";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+<h1>Renovar Contrato</h1>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Detalles del Contrato Actual</h5>
+            <p><strong>Inquilino:</strong> @Model.Inquilino.ToString()</p>
+            <p><strong>Propietario:</strong> @Model.Propietario.ToString()</p>
+            <p><strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToShortDateString()</p>
+            <p><strong>Fecha de Fin:</strong> @Model.FechaFin.ToShortDateString()</p>
+            <p><strong>Monto Mensual:</strong> @Model.MontoMensual</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Detalles del Nuevo Contrato</h5>
+            <form asp-action="Renovar" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="mb-3">
+                    <label for="fechaInicio" class="form-label">Nueva Fecha de Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required />
+                </div>
+                <div class="mb-3">
+                    <label for="fechaFin" class="form-label">Nueva Fecha de Fin</label>
+                    <input type="date" class="form-control" id="fechaFin" name="fechaFin" required />
+                </div>
+                <div class="mb-3">
+                    <label for="montoMensual" class="form-label">Nuevo Monto Mensual</label>
+                    <input type="number" class="form-control" id="montoMensual" name="montoMensual" required />
+                </div>
+                <button type="submit" class="btn btn-success">Renovar Contrato</button>
+            </form>
+        </div>
+    </div>
+</div>

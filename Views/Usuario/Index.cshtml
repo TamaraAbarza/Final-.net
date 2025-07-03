@@ -1,0 +1,293 @@
+﻿@model IEnumerable<Usuario>
+@{
+    ViewData["Title"] = "Usuario";
+}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-form {
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card h5, .card-title {
+        color: #004080;
+        font-weight: 700;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #004080;
+        box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+        outline: none;
+    }
+
+    .btn-primary-custom, .btn-success-custom, .btn-danger-custom {
+        background-color: #004080;
+        border-color: #004080;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+    }
+
+    .btn-primary-custom:hover, .btn-success-custom:hover, .btn-danger-custom:hover {
+        background-color: #003060;
+        border-color: #003060;
+        color: white;
+    }
+
+    .btn-danger-custom {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-danger-custom:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+    }
+
+    .btn-warning-custom {
+        background-color: #d4af37;
+        border-color: #d4af37;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+    }
+
+    .btn-warning-custom:hover {
+        background-color: #b8912b;
+        border-color: #b8912b;
+        color: white;
+    }
+
+    .btn-success-table {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-success-table:hover {
+        background-color: #218838;
+        border-color: #218838;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #004080;
+        color: white;
+    }
+
+    .container.main-content {
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        margin-top: 50px;
+        border-top: none;
+    }
+
+    .card-shadow-custom {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        border: none;
+    }
+
+    .modal-header-custom {
+        background-color: #004080;
+        color: white;
+        border-bottom: 1px solid #dee2e6;
+        border-top-left-radius: calc(0.5rem - 1px);
+        border-top-right-radius: calc(0.5rem - 1px);
+    }
+
+    .modal-body-custom {
+        background-color: #ffffff;
+        color: #333;
+    }
+
+    .modal-footer-custom {
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        border-bottom-left-radius: calc(0.5rem - 1px);
+        border-bottom-right-radius: calc(0.5rem - 1px);
+    }
+
+    .list-group-item strong {
+        color: #004080;
+    }
+
+    .btn-info-table {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-info-table:hover {
+        background-color: #138496;
+        border-color: #138496;
+        color: white;
+    }
+
+    .btn-primary-table {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-primary-table:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .btn-danger-table {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-danger-table:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: white;
+    }
+
+    .btn-secondary-custom {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+    }
+
+    .btn-secondary-custom:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+
+</style>
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="container main-content">
+    <h1 class="mb-4 card-title">Gestión de Usuarios</h1>
+    
+    <div class="d-flex justify-content-start mb-3">
+        <a asp-controller="Usuario" asp-action="Insertar" class="btn btn-success-custom">
+            <i class="bi bi-plus-lg me-1"></i> Agregar nuevo usuario
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table id="miTabla" class="table table-hover align-middle border rounded overflow-hidden">
+            <thead style="background-color: #004080; color: white;">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Avatar</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Apellido</td>
+                        <td>@usuario.Email</td>
+                        <td> @(usuario.Rol == Roles.Administrador ? "Administrador" : "Empleado")</td>
+                        <td> 
+                            @if (usuario.AvatarUrl != "" && usuario.AvatarUrl != null)
+                            {
+                                <img src="@usuario.AvatarUrl" alt="avatar" style="width: 45px; height: 45px; border-radius: 50%;">
+                            }
+                            else
+                            {
+                                <img src="https://static.vecteezy.com/system/resources/previews/007/167/661/non_2x/user-blue-icon-isolated-on-white-background-free-vector.jpg"
+                                    alt="Avatar por defecto"
+                                    style="width: 45px; height: 45px; border-radius: 50%;">
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                                <a asp-controller="Usuario" asp-action="Actualizar" asp-route-id="@usuario.Id"
+                                    class="btn btn-primary-table btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Modificar
+                                </a>
+                                @if (User.IsInRole("Administrador") && User.Identity.Name != usuario.Email)
+                                {
+                                    <a asp-controller="Usuario" asp-action="Eliminar" asp-route-id="@usuario.Id"
+                                        class="btn btn-danger-table btn-sm"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar a este usuario? Esto es una acción permanente.')">
+                                        <i class="bi bi-trash3"></i> Eliminar
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,442 @@
+﻿@model IEnumerable<Inmueble>
+@{
+    ViewData["Title"] = "Inmueble";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    string tipoMensaje = TempData["TipoMensaje"] as string;
+    string claseAlerta = tipoMensaje == "error" ? "alert-danger" : "alert-success";
+
+    <div class="alert @claseAlerta alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-form {
+        /* Estilo general para las tarjetas de formulario, similar al de la primera vista */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card h5 {
+        /* Para los títulos dentro de las tarjetas de búsqueda/filtro */
+        color: #004080;
+        font-weight: 700;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control,
+    .form-select {
+        /* Aplica el mismo estilo de input y select */
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #004080;
+        box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+        outline: none;
+    }
+
+    /* Estilos para los botones principales (buscar, filtrar, agregar inmueble) */
+    .btn-primary-custom,
+    .btn-success-custom {
+        background-color: #004080;
+        border-color: #004080;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+        /* Asegura el color del texto */
+    }
+
+    .btn-primary-custom:hover,
+    .btn-success-custom:hover {
+        background-color: #003060;
+        border-color: #003060;
+        color: white;
+        /* Mantener el texto blanco en hover */
+    }
+
+    /* Estilo para el botón "Ver Disponibles" */
+    .btn-warning-custom {
+        background-color: #d4af37;
+        border-color: #d4af37;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        color: white;
+        /* Asegura el color del texto */
+    }
+
+    .btn-warning-custom:hover {
+        background-color: #b8912b;
+        /* Un tono un poco más oscuro para el hover */
+        border-color: #b8912b;
+        color: white;
+        /* Mantener el texto blanco en hover */
+    }
+
+    .btn-success-table {
+        background-color: #28a745;
+        /* Success de Bootstrap */
+        border-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        /* Un padding que funciona bien para ícono + texto */
+        display: inline-flex;
+        /* Permite alinear el ícono y el texto */
+        align-items: center;
+        /* Centra verticalmente ícono y texto */
+        gap: 5px;
+        /* Espacio entre el ícono y el texto */
+    }
+
+    .btn-success-table:hover {
+        background-color: #218838;
+        border-color: #218838;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #004080;
+        color: white;
+    }
+
+    .container.main-content {
+        /* Contenedor principal con sombra y borde */
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        margin-top: 50px;
+        border-top: none;
+    }
+
+    .card-shadow-custom {
+        /* Para las tarjetas de "Buscar por Fechas" y "Filtrar por Propietario" */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        border: none;
+    }
+
+    /* --- Estilos para la Modal --- */
+    .modal-header-custom {
+        background-color: #004080;
+        /* Azul oscuro */
+        color: white;
+        border-bottom: 1px solid #dee2e6;
+        /* Separador sutil */
+        border-top-left-radius: calc(0.5rem - 1px);
+        /* Mantener el radio del borde */
+        border-top-right-radius: calc(0.5rem - 1px);
+    }
+
+    .modal-body-custom {
+        background-color: #ffffff;
+        /* Fondo blanco */
+        color: #333;
+    }
+
+    .modal-footer-custom {
+        background-color: #f8f9fa;
+        /* Gris claro */
+        border-top: 1px solid #dee2e6;
+        /* Separador sutil */
+        border-bottom-left-radius: calc(0.5rem - 1px);
+        border-bottom-right-radius: calc(0.5rem - 1px);
+    }
+
+    .list-group-item strong {
+        color: #004080;
+        /* Destacar las etiquetas en azul oscuro */
+    }
+
+    .btn-info-table {
+        background-color: #17a2b8;
+        /* Info de Bootstrap */
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .btn-info-table:hover {
+        background-color: #138496;
+        border-color: #138496;
+        color: white;
+    }
+
+    .btn-primary-table {
+        background-color: #007bff;
+        /* Primary de Bootstrap */
+        border-color: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .btn-primary-table:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .btn-danger-table {
+        background-color: #dc3545;
+        /* Danger de Bootstrap */
+        border-color: #dc3545;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .btn-danger-table:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: white;
+    }
+</style>
+
+<div class="container main-content">
+
+    <h1 class="mb-4" style="color: #004080; font-weight: bold;">Gestión de Inmuebles</h1>
+
+    <div class="row g-4 mb-4 align-items-stretch">
+        <div class="col-md-6 d-flex">
+            <div class="card card-shadow-custom flex-grow-1">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-3"><strong>Buscar por Fechas</strong></h5>
+                    <form id="disponibilidadForm" method="get" asp-action="InmueblesDisponiblesPorFecha"
+                        class="flex-grow-1 d-flex flex-column justify-content-between">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fechaFin" class="form-label">Fecha Fin</label>
+                                <input type="date" class="form-control" id="fechaFin" name="fechaFin" required />
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-3">
+                            <button type="submit" class="btn btn-primary-custom w-100">
+                                <i class="bi bi-search me-1"></i> Buscar Disponibilidad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 d-flex">
+            <div class="card card-shadow-custom flex-grow-1">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold mb-3"><strong>Filtrar por Propietario</strong></h5>
+                    <form id="filterForm" asp-controller="Inmueble" asp-action="InmueblesPorPropietario" method="get"
+                        class="flex-grow-1 d-flex flex-column justify-content-between">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-6">
+                                <label for="propietarioId" class="form-label">Propietario</label>
+                                <select id="propietarioId" name="propietarioId" class="form-select">
+                                    <option value="">-- Seleccione un propietario --</option>
+                                    @foreach (var propietario in ViewBag.Propietarios)
+                                    {
+                                        <option value="@propietario.Id">@propietario.Nombre @propietario.Apellido</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-check d-flex align-items-center ps-4">
+                                <input class="form-check-input me-2" type="checkbox" id="disponible" name="disponible"
+                                    value="true">
+                                <label class="form-check-label" for="disponible">Solo Disponibles</label>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-3">
+                            <button type="submit" class="btn btn-primary-custom w-100">
+                                <i class="bi bi-search me-1"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-start align-items-center mb-3">
+        <a asp-controller="Inmueble" asp-action="Insertar" class="btn btn-primary-custom me-2">
+            <i class="bi bi-plus-circle me-1"></i> Agregar Inmueble
+        </a>
+        <button id="verDisponibles" class="btn btn-warning-custom">
+            <i class="bi bi-eye-fill me-1"></i> Ver Disponibles
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table id="miTabla" class="table table-hover align-middle border rounded overflow-hidden">
+            <thead style="background-color: #004080; color: white;">
+                <tr>
+                    <th>Propietario</th>
+                    <th>Dirección</th>
+                    <th>Ambientes</th>
+                    <th>Tipo</th>
+                    <th>Precio</th>
+                    <th>disponible</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="inmuebles-list">
+                @foreach (var inmueble in Model)
+                {
+                    <tr>
+                        <td>@inmueble.Propietario.ToString()</td>
+                        <td>@inmueble.Direccion</td>
+                        <td>@inmueble.Ambientes</td>
+                        <td>@inmueble.Tipo.ToString()</td>
+                        <td>@inmueble.Precio</td>
+                        <td>@(inmueble.Disponible? "Sí" : "No") </td>
+                        <td class="text-center">
+                            <a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@inmueble.Id"
+                                class="btn btn-info-table btn-sm me-1" data-bs-toggle="modal"
+                                data-bs-target="#modalDetalles_@inmueble.Id">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+
+                            <a asp-controller="Inmueble" asp-action="Actualizar" asp-route-id="@inmueble.Id"
+                                class="btn btn-primary-table btn-sm me-1">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a asp-controller="Inmueble" asp-action="Eliminar" asp-route-id="@inmueble.Id"
+                                    class="btn btn-danger-table btn-sm"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este inmueble?')">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+
+                    <div class="modal fade" id="modalDetalles_@inmueble.Id" tabindex="-1"
+                        aria-labelledby="modalDetallesLabel_@inmueble.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header modal-header-custom">
+                                    <h5 class="modal-title" id="modalDetallesLabel_@inmueble.Id">
+                                        Detalles del Inmueble
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body modal-body-custom">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Propietario:</strong> @inmueble.Propietario</li>
+                                        <li class="list-group-item"><strong>Dirección:</strong> @inmueble.Direccion</li>
+                                        <li class="list-group-item"><strong>Ambientes:</strong> @inmueble.Ambientes</li>
+                                        <li class="list-group-item"><strong>Superficie:</strong> @inmueble.Superficie m²
+                                        </li>
+                                        <li class="list-group-item"><strong>Latitud:</strong> @inmueble.Latitud</li>
+                                        <li class="list-group-item"><strong>Longitud:</strong> @inmueble.Longitud</li>
+                                        <li class="list-group-item"><strong>Estado:</strong> @(inmueble.Disponible ?
+                                                                                    "Disponible" : "No Disponible")</li>
+                                        <li class="list-group-item"><strong>Tipo:</strong> @inmueble.Tipo</li>
+                                        <li class="list-group-item"><strong>Uso:</strong> @inmueble.Uso</li>
+                                        <li class="list-group-item"><strong>Precio:</strong> @inmueble.Precio</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer modal-footer-custom">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Función para manejar las llamadas AJAX y actualizar la tabla
+            function updateInmueblesList(url, data) {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    success: function (htmlContent) {
+                        $('#inmuebles-list').html(htmlContent);
+                        // No es necesario reinicializar los modales aquí porque los elementos
+                        // con data-bs-toggle se vuelven a añadir al DOM con el nuevo HTML.
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX Error: " + textStatus, errorThrown);
+                        alert("Error al cargar los inmuebles: " + textStatus);
+                    }
+                });
+            }
+
+            // Manejador para el formulario de disponibilidad por fecha
+            $('#disponibilidadForm').submit(function (event) {
+                event.preventDefault();
+                var fechaInicio = $('#fechaInicio').val();
+                var fechaFin = $('#fechaFin').val();
+
+                if (!fechaInicio || !fechaFin) {
+                    alert("Por favor, seleccione ambas fechas para la búsqueda de disponibilidad.");
+                    return;
+                }
+                if (new Date(fechaInicio) > new Date(fechaFin)) {
+                    alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+                    return;
+                }
+
+                updateInmueblesList('@Url.Action("InmueblesDisponiblesPorFecha", "Inmueble")', { fechaInicio: fechaInicio, fechaFin: fechaFin });
+            });
+
+            // Manejador para el botón "Ver Disponibles"
+            $('#verDisponibles').click(function () {
+                updateInmueblesList('@Url.Action("Disponibles", "Inmueble")');
+            });
+
+            // Manejador para el formulario de filtro por propietario
+            $('#filterForm').submit(function (event) {
+                event.preventDefault();
+                var propietarioId = $('#propietarioId').val();
+                var disponible = $('#disponible').is(':checked');
+
+                updateInmueblesList('@Url.Action("InmueblesPorPropietario", "Inmueble")', { propietarioId: propietarioId, disponible: disponible });
+            });
+        });
+    </script>
+}

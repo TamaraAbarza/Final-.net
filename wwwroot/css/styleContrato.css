@@ -1,0 +1,96 @@
+
+/* Estilos Generales */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Estilos para Tarjetas de Formulario */
+.card-form {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 50px;
+}
+
+.card-form h3 {
+    color: #004080;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Estilos para Etiquetas de Formulario */
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Estilos para Controles de Formulario e Inputs/Selects */
+.form-control, select {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus, select:focus {
+    border-color: #004080;
+    box-shadow: 0 0 6px rgba(0, 64, 128, 0.3);
+    outline: none;
+}
+
+/* Estilos para Botones Primarios */
+.btn-primary {
+    background-color: #004080;
+    border-color: #004080;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary:hover {
+    background-color: #003060;
+    border-color: #003060;
+}
+
+/* Estilos para Botones de Peligro */
+.btn-danger {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Estilos para Texto de Peligro (Validación) */
+.text-danger {
+    font-size: 0.9rem;
+}
+
+/* Estilos para Contenedores Flex con Espacio entre Elementos */
+.d-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+
+/* Estilos para Botones Secundarios */
+.btn-secondary {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px 20px;
+}
+
+/* Estilos para Botones de Ancho Completo */
+.btn-block {
+    width: 100%;
+}

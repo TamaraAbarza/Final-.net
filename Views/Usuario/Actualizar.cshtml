@@ -1,0 +1,193 @@
+﻿@model Usuario
+
+@{
+    ViewData["Title"] = "Actualizar usuario";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .label-avatar {
+        margin-left: 30px;
+    }
+
+    .form-login {
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        /* Hacer que el botón ocupe el ancho de los inputs */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    /* Estilo para alinear el botón a la derecha */
+    .align-right {
+        margin-left: auto;
+    }
+
+    legend {
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        border-bottom-color: transparent;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-login">
+                <h4 class="mb-4 lead  font-weight-bold text-primary">Perfil de @Model.Nombre @Model.Apellido</h4>
+
+                <form asp-controller="Usuario" asp-action="CargarAvatar" method="post" enctype="multipart/form-data">
+
+                    <!-- Nueva modificacion--->
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                    <fieldset class="border p-2 mb-4">
+                        <legend class="w-100 font-weight-light mb-4" style="display: block;">Avatar</legend>
+                        <div class="form-group">
+                            <div class="d-flex align-items-center">
+
+                                @if (Model.AvatarUrl != "" && Model.AvatarUrl != null)
+                                {
+                                    <img src="@Model.AvatarUrl" alt="avatar" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;
+                                        margin-right: 15px;" class="mr-3">
+                                }
+                                else
+                                {
+                                    <img src="https://static.vecteezy.com/system/resources/previews/007/167/661/non_2x/user-blue-icon-isolated-on-white-background-free-vector.jpg"
+                                        alt="Avatar por defecto" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;
+                                        margin-right: 15px;" class="mr-3">
+                                }
+                                <div>
+                                    <div class="mb-3">
+                                        <input asp-for="AvatarFile" class="form-control mb-3" type="file"
+                                            accept="image/*" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <a asp-controller="Usuario" asp-action="EliminarAvatar" asp-route-id="@Model.Id"
+                                            class="btn btn-danger"
+                                            onclick="return confirm('¿Estás seguro de que deseas eliminar el avatar?')">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+                @*=========================== FORM DATOS PERSONALES =========================================*@
+
+                <form asp-controller="Usuario" asp-action="Actualizar" method="post">
+                    <!-- Nueva modificacion--->
+                    <input type="hidden" asp-for="Id" />
+
+                    <fieldset class="border p-2 mb-4">
+                        <legend class="w-100 font-weight-light mb-4">
+                            Datos Personales</legend>
+                        <div class="form-group">
+                            <label asp-for="Nombre" class="control-label">Nombre</label>
+                            <input asp-for="Nombre" class="form-control" required />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Apellido" class="control-label">Apellido</label>
+                            <input asp-for="Apellido" class="form-control" required />
+                            <span asp-validation-for="Apellido" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label">Email</label>
+                            <input asp-for="Email" class="form-control" type="email" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+    <label asp-for="Rol" class="control-label">Rol:</label>
+    <select asp-for="Rol" class="form-control">
+        <option value="">Selecciona un rol</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Empleado">Empleado</option>
+    </select>
+</div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                            <a asp-controller="Usuario" asp-action="Index"
+                                class="btn btn-danger mt-3 align-right">Cancelar</a>
+                        </div>
+                    </fieldset>
+
+                </form>
+
+                @* ================================== FORM CAMBIO DE CONTRASEÑA ============================ *@
+
+                <form asp-controller="Usuario" asp-action="Actualizar" method="post">
+                    <!-- Nueva modificacion--->
+                    <input type="hidden" asp-for="Id" />
+
+                    <fieldset class="border p-2">
+                        <legend class="w-100 font-weight-light mb-4">
+                            Seguridad
+                        </legend>
+
+                        <div class="form-group">
+                            <label asp-for="Password" class="control-label">Contraseña</label>
+                            <input asp-for="Password" class="form-control" type="password" id="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="control-label">Repita la contraseña</label>
+                            <input asp-for="ConfirmPassword" class="form-control" type="password"
+                                id="ConfirmPassword" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Cambiar contraseña</button>
+                        </div>
+                    </fieldset>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Script para verificar que las contraseñas sean iguales*@
+<script>
+    document.getElementById("confirmPassword").addEventListener("keyup", function () {
+        var password = document.getElementById("password").value;
+        var confirmPassword = this.value;
+        var passwordError = document.getElementById("passwordError");
+
+        if (password !== confirmPassword) {
+            passwordError.textContent = "Las contraseñas no coinciden";
+        } else {
+            passwordError.textContent = "";
+        }
+    });
+</script>

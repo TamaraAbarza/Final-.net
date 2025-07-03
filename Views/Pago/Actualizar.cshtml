@@ -1,0 +1,49 @@
+@using System.Globalization
+@model Pago
+
+@{
+    ViewData["Title"] = "Modificacion de pago";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/css/stylePago.css")" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card-form">
+                <h3><i class="bi bi-currency-dollar"></i> @ViewData["Title"]</h3>
+
+                <form asp-controller="Pago" asp-action="Actualizar" method="post">
+
+                    <fieldset class="border p-2 mb-4">
+                        <legend class="w-100 font-weight-light mb-4" style="display: block;">Modificar pago
+                        </legend>
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Mes</label>
+                            <select class="form-control" name="Detalle">
+                                <option value="" disabled selected>Seleccione un mes</option>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@DateTimeFormatInfo.CurrentInfo.GetMonthName(i)">
+                                        @DateTimeFormatInfo.CurrentInfo.GetMonthName(i)</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Detalle" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex-between">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Guardar
+                            </button>
+                            <a asp-controller="Pago" asp-action="Index" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

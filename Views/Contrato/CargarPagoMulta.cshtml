@@ -1,0 +1,35 @@
+@model Contrato
+
+@{
+    ViewData["Title"] = "Cargar Pago de Multa";
+}
+
+<h1>Cargar Pago de Multa</h1>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Detalles del Contrato</h5>
+            <p><strong>Inquilino:</strong> @Model.Inquilino.ToString()</p>
+            <p><strong>Propietario:</strong> @Model.Propietario.ToString()</p>
+            <p><strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToShortDateString()</p>
+            <p><strong>Fecha de Fin:</strong> @Model.FechaFin.ToShortDateString()</p>
+            <p><strong>Monto Mensual:</strong> @Model.MontoMensual</p>
+            <p><strong>Fecha de Terminación Anticipada:</strong> @Model.FechaTerminacion?.ToShortDateString()</p>
+            <p><strong>Multa:</strong> @Model.MultaTerminacion</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Registrar Pago de Multa</h5>
+            <form asp-action="CargarPagoMulta" method="post">
+                <div class="mb-3">
+                    <label for="montoPagado" class="form-label">Monto Pagado</label>
+                    <input type="number" class="form-control" id="montoPagado" name="montoPagado" required />
+                </div>
+                <button type="submit" class="btn btn-success">Registrar Pago</button>
+            </form>
+        </div>
+    </div>
+</div>
