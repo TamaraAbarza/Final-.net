@@ -1,0 +1,6 @@
+Empleado { mail: "empleado@gmail.com"
+contraseña: 123}
+
+Administrador { mail: "administrador@gmail.com"
+contraseña: 123}
+
